@@ -33,9 +33,7 @@ install:
   - if  [ $PREFER_LOWEST = 'true' ]; then composer update --prefer-lowest --prefer-stable; fi
 
 script:
-  - vendor/bin/parallel-lint -e php,phpt src tests
-  - vendor/bin/phpcs -sp --standard=vendor/nella/coding-standard/Nella/ruleset.xml src tests
-  - if  ! [[ $TRAVIS_PHP_VERSION =~ ^hhvm ]] && ! [[ $TRAVIS_PHP_VERSION =~ ^nightly ]] && ! [[ $TRAVIS_PHP_VERSION = '7.0' ]]; then vendor/bin/tester -s -p php -c tests/php.ini tests --coverage build/clover.xml --coverage-src src; else vendor/bin/tester -s -p php -c tests/php.ini tests; fi
+  - vendor/bin/robo ci:build
 
 after_script:
-  - if  ! [[ $TRAVIS_PHP_VERSION =~ ^hhvm ]] && ! [[ $TRAVIS_PHP_VERSION =~ ^nightly ]] && ! [[ $TRAVIS_PHP_VERSION = '7.0' ]]; then vendor/bin/coveralls -v; fi
+  - vendor/bin/robo ci:after
