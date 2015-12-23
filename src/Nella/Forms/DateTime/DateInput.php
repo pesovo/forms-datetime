@@ -72,7 +72,7 @@ class DateInput extends \Nette\Forms\Controls\BaseControl
 	{
 		if ($value === NULL) {
 			return parent::setValue(NULL);
-		} elseif (!$value instanceof \DateTimeInterface) {
+		} elseif (!$value instanceof \DateTime) {
 			throw new \Nette\InvalidArgumentException('Value must be DateTimeInterface or NULL');
 		}
 
@@ -80,7 +80,7 @@ class DateInput extends \Nette\Forms\Controls\BaseControl
 	}
 
 	/**
-	 * @return \DateTimeImmutable|NULL
+	 * @return \DateTime|NULL
 	 */
 	public function getValue()
 	{
@@ -88,12 +88,13 @@ class DateInput extends \Nette\Forms\Controls\BaseControl
 			return NULL;
 		}
 
-		$datetime = \DateTimeImmutable::createFromFormat($this->format, $this->getRawValue());
+		$datetime = \DateTime::createFromFormat($this->format, $this->getRawValue());
 		if ($datetime === FALSE || $datetime->format($this->format) !== $this->getRawValue()) {
 			return NULL;
 		}
 
-		return $datetime->setTime(0, 0, 0);
+		//$datetime->setTime(0, 0, 0);
+		return $datetime;
 	}
 
 	/**
@@ -112,7 +113,7 @@ class DateInput extends \Nette\Forms\Controls\BaseControl
 			return;
 		}
 
-		$datetime = \DateTimeImmutable::createFromFormat(
+		$datetime = \DateTime::createFromFormat(
 			$this->normalizeFormat($this->format),
 			$this->normalizeFormat($input)
 		);
@@ -182,7 +183,7 @@ class DateInput extends \Nette\Forms\Controls\BaseControl
 		parent::setRequired($message);
 
 		$this->addCondition(Form::FILLED)
-			->addRule(function (DateInput $control) {
+			->addRule(function(DateInput $control) {
 				return $this->validateDate($control);
 			}, $message);
 

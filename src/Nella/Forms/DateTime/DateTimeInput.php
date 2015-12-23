@@ -10,7 +10,6 @@
 
 namespace Nella\Forms\DateTime;
 
-use DateTimeImmutable;
 use Nette\Forms\Container;
 use Nette\Forms\Form;
 
@@ -48,10 +47,10 @@ class DateTimeInput extends \Nette\Forms\Controls\BaseControl
 	private $time;
 
 	/** @var mixed[]|array */
-	private $dateAttributes = [];
+	private $dateAttributes = array();
 
 	/** @var mixed[]|array */
-	private $timeAttributes = [];
+	private $timeAttributes = array();
 
 	/** @var bool */
 	private $sanitizeShortHour = TRUE;
@@ -59,7 +58,7 @@ class DateTimeInput extends \Nette\Forms\Controls\BaseControl
 	/** @var bool */
 	private $strict = FALSE;
 
-	/** @var \DateTimeImmutable|null */
+	/** @var \DateTime|null */
 	private $defaultTime;
 
 	/**
@@ -117,7 +116,7 @@ class DateTimeInput extends \Nette\Forms\Controls\BaseControl
 	}
 
 	/**
-	 * @return \DateTimeImmutable|NULL
+	 * @return \DateTime|NULL
 	 */
 	public function getValue()
 	{
@@ -128,7 +127,7 @@ class DateTimeInput extends \Nette\Forms\Controls\BaseControl
 		$format = sprintf(static::FORMAT_PATTERN, $this->dateFormat, $this->timeFormat);
 		$datetimeString = sprintf(static::FORMAT_PATTERN, $this->date, $this->time);
 
-		$datetime = DateTimeImmutable::createFromFormat($format, $datetimeString);
+		$datetime = DateTime::createFromFormat($format, $datetimeString);
 
 		if ($datetime === FALSE || $datetime->format($format) !== $datetimeString) {
 			return NULL;
@@ -176,7 +175,7 @@ class DateTimeInput extends \Nette\Forms\Controls\BaseControl
 			$this->normalizeFormat($this->dateFormat),
 			$this->normalizeFormat($this->timeFormat)
 		);
-		$datetime = \DateTimeImmutable::createFromFormat($datetimeFormat, $inputString);
+		$datetime = \DateTime::createFromFormat($datetimeFormat, $inputString);
 
 		if ($datetime === FALSE || $datetime->format($datetimeFormat) !== $inputString) {
 			$this->date = '';
@@ -297,7 +296,7 @@ class DateTimeInput extends \Nette\Forms\Controls\BaseControl
 		$this->sanitizeShortHour = false;
 	}
 
-	public function setDefaultTime(\DateTimeImmutable $defaultTime = NULL)
+	public function setDefaultTime(\DateTime $defaultTime = NULL)
 	{
 		$this->defaultTime = $defaultTime;
 	}
@@ -328,7 +327,7 @@ class DateTimeInput extends \Nette\Forms\Controls\BaseControl
 		parent::setRequired($message);
 
 		$this->addCondition(Form::FILLED)
-			->addRule(function (DateTimeInput $control) {
+			->addRule(function(DateTimeInput $control) {
 				return $this->validateDateTime($control);
 			}, $message);
 
@@ -358,5 +357,4 @@ class DateTimeInput extends \Nette\Forms\Controls\BaseControl
 
 		Container::extensionMethod('addDateTime', $callback);
 	}
-
 }
