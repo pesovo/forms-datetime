@@ -1,5 +1,5 @@
 {
-	"name": "nella/forms-datetime",
+	"name": "pesovo/forms-datetime",
 	"description": "Date/DateTime control for Nette Forms.",
 	"homepage": "http://doc.nellafw.org/forms/datetime",
 	"type": "library",
